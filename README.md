@@ -10,8 +10,8 @@
 
 | Skill | 版本 | 说明 |
 | --- | --- | --- |
-| [career-plan-generator](./career-plan-generator%20v2.0-PUB/) | v2.0 (PUB) | 为中国高校大学生生成深度定制化《职业规划成长计划书》——公开版，无特定机构推广内容 |
-| [career-plan-generator](./career-plan-generator%20v1.5-GOK/) | v1.5 (GOK) | 同上——国科学员定制版，含国科科技专项摸底与素拓建议 |
+| [career-plan-generator](./career-plan-generator-v2.0-PUB/) | v2.0 (PUB) | 为中国高校大学生生成深度定制化《职业规划成长计划书》——公开版，无特定机构推广内容 |
+| [career-plan-generator](./career-plan-generator-v1.5-GOK/) | v1.5 (GOK) | 同上——国科学员定制版，含国科科技专项摸底与素拓建议 |
 
 ### 版本差异说明
 
@@ -35,7 +35,7 @@
 直接对 WorkBuddy / Claude Code 说：
 
 ```
-安装这个 skill：https://github.com/cylzzscl/cy-skills/tree/main/career-plan-generator%20v2.0-PUB
+安装这个 skill：https://github.com/cylzzscl/cy-skills/tree/main/career-plan-generator-v2.0-PUB
 ```
 
 Agent 会自动将 skill 文件夹下载并安装到 `~/.workbuddy/skills/career-plan-generator/`，无需手动克隆整个仓库。
@@ -44,10 +44,10 @@ Agent 会自动将 skill 文件夹下载并安装到 `~/.workbuddy/skills/career
 
 | Skill | 安装链接 |
 | --- | --- |
-| career-plan-generator v2.0 (公开版) | `https://github.com/cylzzscl/cy-skills/tree/main/career-plan-generator%20v2.0-PUB` |
-| career-plan-generator v1.5 (国科版) | `https://github.com/cylzzscl/cy-skills/tree/main/career-plan-generator%20v1.5-GOK` |
+| career-plan-generator v2.0 (公开版) | `https://github.com/cylzzscl/cy-skills/tree/main/career-plan-generator-v2.0-PUB` |
+| career-plan-generator v1.5 (国科版) | `https://github.com/cylzzscl/cy-skills/tree/main/career-plan-generator-v1.5-GOK` |
 
-> **提示**：文件夹名称中的空格在 URL 中会被编码为 `%20`，直接复制上面的链接即可。
+> **提示**：直接复制链接即可，Agent 会自动识别并安装。
 
 ---
 
@@ -79,15 +79,15 @@ Agent 会自动将 skill 文件夹下载并安装到 `~/.workbuddy/skills/career
 
 4. **确保文件夹名称与 SKILL.md 中的 `name` 字段一致**
 
-   例如安装 `career-plan-generator v2.0-PUB`：
+   例如安装 `career-plan-generator-v2.0-PUB`：
    ```bash
    # 复制到用户级技能目录，并重命名为 SKILL.md 中定义的 name
-   cp -r "cy-skills/career-plan-generator v2.0-PUB" ~/.workbuddy/skills/career-plan-generator
+   cp -r "cy-skills/career-plan-generator-v2.0-PUB" ~/.workbuddy/skills/career-plan-generator
    ```
 
    Windows PowerShell：
    ```powershell
-   Copy-Item -Recurse "cy-skills\career-plan-generator v2.0-PUB" "$env:USERPROFILE\.workbuddy\skills\career-plan-generator"
+   Copy-Item -Recurse "cy-skills\career-plan-generator-v2.0-PUB" "$env:USERPROFILE\.workbuddy\skills\career-plan-generator"
    ```
 
 5. **重启 WorkBuddy / Claude Code**，技能将自动加载
@@ -123,7 +123,7 @@ Agent 会自动将 skill 文件夹下载并安装到 `~/.workbuddy/skills/career
 
 **目录结构**（以 v2.0-PUB 为例）：
 ```
-career-plan-generator v2.0-PUB/
+career-plan-generator-v2.0-PUB/
 ├── SKILL.md                  主流程定义（AI 读取的核心文件）
 ├── README.md                 技能说明
 ├── references/
