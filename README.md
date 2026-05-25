@@ -28,7 +28,30 @@
 
 - 已安装 [WorkBuddy](https://www.codebuddy.cn/) 或 [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 
-### 安装步骤
+---
+
+### 方式一：让 Agent 直接安装（推荐，最快捷）
+
+直接对 WorkBuddy / Claude Code 说：
+
+```
+安装这个 skill：https://github.com/cylzzscl/cy-skills/tree/main/career-plan-generator%20v2.0-PUB
+```
+
+Agent 会自动将 skill 文件夹下载并安装到 `~/.workbuddy/skills/career-plan-generator/`，无需手动克隆整个仓库。
+
+**可安装的 skill 链接**：
+
+| Skill | 安装链接 |
+| --- | --- |
+| career-plan-generator v2.0 (公开版) | `https://github.com/cylzzscl/cy-skills/tree/main/career-plan-generator%20v2.0-PUB` |
+| career-plan-generator v1.5 (国科版) | `https://github.com/cylzzscl/cy-skills/tree/main/career-plan-generator%20v1.5-GOK` |
+
+> **提示**：文件夹名称中的空格在 URL 中会被编码为 `%20`，直接复制上面的链接即可。
+
+---
+
+### 方式二：克隆仓库后手动安装
 
 1. **克隆本仓库**
 
@@ -68,6 +91,8 @@
    ```
 
 5. **重启 WorkBuddy / Claude Code**，技能将自动加载
+
+---
 
 ### 安装验证
 
