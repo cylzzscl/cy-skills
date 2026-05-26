@@ -204,6 +204,59 @@ date +"%Y-%m-%d"
 
 依据所有收集到的信息生成 .docx 文件。**完整章节模板见** `references/plan_template.md`。
 
+#### ⚠️ 防 Socket 超时 · 强制执行规范（v1.5 新增）
+
+> **绝对禁止**：将 plan_data dict 或任何 Python 脚本内容**直接输出在对话消息体中**。
+> 完整计划书正文约 4-6 万字；若以内联代码块 / 文本形式输出，响应体积将超过 socket 传输上限，
+> 必然触发「The socket connection was closed unexpectedly」错误，导致生成失败。
+
+**正确流程（严格按步骤，不可跳步）**：
+
+1. **Write 工具** → 把生成脚本写入临时 .py 文件（推荐路径同桌面或工作目录，如 `gen_plan_<称呼>.py`）  
+   ⇒ 此步骤**对话里不输出任何内容**，只让 Write 工具返回"File created"
+2. **Bash 工具** → `python gen_plan_<称呼>.py` 执行脚本  
+   ⇒ 只把脚本末尾的 `print("DONE")` 一行回显到对话
+3. **Bash 工具** → 验证 docx 已生成且大小合理（`os.path.getsize(path) > 30000`）
+4. **Bash 工具** → 删除临时脚本文件（`os.remove(...)`）
+5. 向学生发送**一条短确认消息**（< 200 字），说明文件路径与主要章节列表
+
+生成脚本的最简骨架：
+
+```python
+# -*- coding: utf-8 -*-
+import sys
+sys.path.insert(0, r"C:\Users\<用户名>\.claude\skills\career-plan-generator\scripts")
+import build_docx as bd
+
+plan = {
+    "studentName": "...",
+    "subtitle": "...",
+    "epigraph": "...",
+    "generatedAt": "YYYY-MM-DD",
+    "planRange": "YYYY — YYYY",
+    "portrait": "...",
+    "chapters": [ ... ],
+    "closingLetter": "..."
+}
+bd.build(plan, r"<桌面或工作目录>\<称呼>_职业规划成长计划书.docx")
+print("DONE")
+```
+
+#### ⚠️ Python 字符串中的中文引号规范（v1.5 新增）
+
+中文写作习惯中常用 `"引用文字"` 表示强调或引用；但若这对引号是 ASCII `"` (U+0022)，
+放入同样以 `"` 为界定符的 Python 字符串会立即产生 `SyntaxError`。
+
+**必须选择以下任一方式**（任选其一即可，保持全文一致）：
+
+| 方式 | 示例 | 适用场景 |
+|------|------|----------|
+| 转义 | `"你是\"底盘真实、上层待建\"的起点"` | 少量出现 |
+| 中文书名号 | `"你是「底盘真实、上层待建」的起点"` | **推荐**，全文一致 |
+| 单引号外层 | `'你是"底盘真实、上层待建"的起点'` | 该行无单引号时可用 |
+
+**禁止**直接把 `"中文引用"` 写进双引号字符串而不做任何处理。
+
 **v1.1 / v1.2 / v1.4 强制章节**：
 - 第二章后插入「城市与组织画像」章节（基于 Stage 3.3 / 3.4 调研）
 - 「核心技能学习路线」之后插入「可迁移能力（综合能力）培养路线」章节——v1.2 完整重写
@@ -293,7 +346,16 @@ node scripts/build_docx.js plan_data.json output.docx
 
 ```bash
 pip install python-docx   # 如果未安装。某些环境用 pip install --break-system-packages python-docx
-python scripts/build_docx.py plan_data.json output.docx
+```
+
+**⚠️ 不要用 `plan_data.json` 中转**——JSON 不支持多行字符串值，中文内容含换行时极易触发
+`JSONDecodeError`。应直接用 Python 脚本（.py 文件）构造 dict 并调用 `bd.build()`：
+
+```bash
+# 1. Write 工具把脚本写入 gen_plan_<称呼>.py
+# 2. 执行
+python gen_plan_<称呼>.py
+# 3. 验证 & 删除临时脚本
 ```
 
 适用环境：几乎所有 Agent 沙箱、Claude Code、Cowork、ChatGPT Code Interpreter 等
@@ -354,6 +416,9 @@ pandoc plan.md -o plan.docx --reference-doc=<可选模板>
 - **IT 技术方向学生没有触发国科科技专项摸底建议** —— v1.4 第八章末必含（仅 IT 方向学生）
 - **学生活动经历薄弱但没有触发国科素拓活动建议** —— v1.4 第九章末必含（仅活动薄弱学生）
 - **结尾段标题是"写给你的一段话"而不是"写给你的一封信"** —— v1.4 强制改名，且必须用书信格式（开头称呼 + 结尾署名）
+- **把 plan_data 或生成脚本代码直接输出在对话消息体中** —— v1.5 严禁；必须用 Write 工具写文件、Bash 工具执行，对话里只发短确认消息（< 200 字）
+- **用 JSON 文件（.json）中转 plan_data** —— v1.5 严禁；JSON 不支持多行字符串，必须用 Python 脚本（.py）直接构造 dict
+- **在 Python 双引号字符串内直接写 ASCII `"引用"` 而不转义** —— v1.5 严禁；必须用 `\"` 转义或改用 `「」` 书名号
 
 ---
 

@@ -1132,11 +1132,17 @@ E5. **回到开头那个画面 / 那个问题**（首尾呼应，形成完整感
 
 ## 第 6 节：docx 生成附录
 
-正文与 Stage 7 全部写完后，按下列步骤生成 docx：
+> **执行规范以 `SKILL.md` 的「输出文件 · 跨环境 fallback 链」和「Stage 6 防 Socket 超时规范」为准。**
+> 本节仅说明风格参数；不再重复执行步骤，避免与 SKILL.md 产生矛盾。
 
-1. 把所有内容组织成一份结构化的 JS 对象（见 `scripts/build_docx.js` 中的 `planData` 占位结构）
-2. 调用 `node scripts/build_docx.js <data.json> <output.docx>` 生成
-3. 如果 Node 环境不可用，降级为直接生成 .md 文件
+正文与 Stage 7 全部写完后，**必须**按以下方式生成 docx（严禁将内容内联输出在对话消息中）：
+
+1. **Write 工具** → 将 plan_data dict 和调用代码写入临时 Python 脚本（`.py` 文件，禁用 `.json` 中转）
+2. **Bash 工具** → `python gen_plan_<称呼>.py` 执行脚本，只把 `print("DONE")` 回显到对话
+3. **Bash 工具** → 验证文件存在、大小合理（> 30 KB），然后删除临时脚本
+4. 向学生发送一条 < 200 字的短确认消息
+
+Node 不可用时降级为 Python（`scripts/build_docx.py`），Python 不可用时才尝试 Pandoc，**禁止直接降级为 .md**。
 
 ### docx 风格建议
 
